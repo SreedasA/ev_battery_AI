@@ -1,0 +1,14 @@
+{
+  "class_thresholds": {
+    "BMS_Unit": 0.65,
+    "Busbars": 0.55,
+    "Coolant_tubes": 0.65,
+    "battery_module": 0.55,
+    "battery_tray": 0.7,
+    "fasteners": 0.55,
+    "low_volt_cable": 0.55,
+    "pack_cover": 0.7
+  },
+  "max_boxes": 12,
+  "roi": null
+}

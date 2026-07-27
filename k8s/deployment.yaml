@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ev-battery-ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ev-battery-ai
+  template:
+    metadata:
+      labels:
+        app: ev-battery-ai
+    spec:
+      containers:
+        - name: ev-battery-ai
+          image: ev-battery-ai:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: outputs
+              mountPath: /app/outputs
+            - name: runs
+              mountPath: /app/runs
+            - name: configs
+              mountPath: /app/configs
+          resources:
+            limits:
+              cpu: "4"
+              memory: 8Gi
+            requests:
+              cpu: "2"
+              memory: 4Gi
+      volumes:
+        - name: outputs
+          emptyDir: {}
+        - name: runs
+          hostPath:
+            path: /data/ev-battery-ai/runs
+            type: Directory
+        - name: configs
+          hostPath:
+            path: /data/ev-battery-ai/configs
+            type: Directory

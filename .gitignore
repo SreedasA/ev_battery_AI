@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Jupyter — strip all notebooks and checkpoints from git
+# To share a specific notebook, use: git add -f <notebook.ipynb>
+.ipynb_checkpoints/
+*.ipynb
+
+# Private documents (dissertation, personal notes)
+*.pdf
+
+# Local data and training artifacts
+EV Battery Dataset 1045/
+EV Battery Dataset 1045 v2.0/
+frames/
+annotation_staging/
+pseudo_labels/
+runs/
+outputs/*
+!outputs/.gitkeep
+
+# Large model/video files
+*.pt
+*.onnx
+*.engine
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Internal development / review docs and superseded secondary READMEs
+ENGINEERING_AUDIT.md
+PUBLICATION_REVIEW.md
+PUBLICATION_REVIEW_2.md
+INCIDENT_REPORT_EV_BATTERY_AI.md
+PROJECT_PLAN.md
+README_EV_BATTERY_AI.md
+VIDEO_ANNOTATION_README.md
+WEB_APP_README.md
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

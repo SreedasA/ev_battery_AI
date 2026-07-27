@@ -1,0 +1,23 @@
+# Core dependencies — tested environment: Python 3.10, Windows 11, RTX 3050 4GB
+# Last validated: 2026-07-02 (Experiment #13, ultralytics 8.4.60)
+#
+# IMPORTANT — PyTorch CUDA (not on PyPI, install first):
+#   pip install torch==2.7.1+cu118 torchvision \
+#       --index-url https://download.pytorch.org/whl/cu118
+#
+# CPU-only alternative:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+#
+# To freeze the full environment after install:
+#   pip freeze > requirements-lock.txt
+
+# ── ML stack ─────────────────────────────────────────────────────────────────
+ultralytics==8.4.60
+
+# ── Computer vision ───────────────────────────────────────────────────────────
+opencv-python==4.13.0.92
+
+# ── Web app ───────────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+python-multipart>=0.0.9
+uvicorn[standard]>=0.29.0

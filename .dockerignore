@@ -1,0 +1,9 @@
+.git
+__pycache__/
+.ipynb_checkpoints/
+outputs/
+EV Battery Dataset 1045/
+*.ipynb
+*.mp4
+*.pt
+runs/

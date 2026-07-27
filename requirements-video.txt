@@ -1,0 +1,8 @@
+# Video inference CLI — tested with Python 3.10, CUDA 11.8
+#
+# Install torch CUDA first (not on PyPI):
+#   pip install torch==2.7.1+cu118 torchvision \
+#       --index-url https://download.pytorch.org/whl/cu118
+
+ultralytics==8.4.60
+opencv-python==4.13.0.92

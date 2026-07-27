@@ -1,0 +1,14 @@
+# FastAPI web app — tested with ultralytics 8.4.60, Python 3.10
+#
+# Docker note: the Dockerfile uses python:3.10-slim (CPU only).
+# For GPU inference in Docker, switch base image to pytorch/pytorch:2.7.1-cuda11.8-cudnn9-runtime
+# and remove the torch install below.
+#
+# Install torch for CPU (used in Docker build):
+#   pip install torch==2.7.1 torchvision --index-url https://download.pytorch.org/whl/cpu
+
+ultralytics==8.4.60
+opencv-python==4.13.0.92
+fastapi>=0.111.0
+python-multipart>=0.0.9
+uvicorn[standard]>=0.29.0

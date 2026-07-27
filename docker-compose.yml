@@ -1,0 +1,11 @@
+services:
+  ev-battery-ai:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./outputs:/app/outputs
+      - ./runs:/app/runs
+      - ./configs:/app/configs
+    environment:
+      - PYTHONUNBUFFERED=1

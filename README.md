@@ -51,7 +51,7 @@ pip install -r requirements.txt
 # 2. Download trained weights (39 MB)
 mkdir -p runs/detect/ev_battery_loss_exp/wiou_v2_250/weights
 wget -O runs/detect/ev_battery_loss_exp/wiou_v2_250/weights/best.pt \
-    https://github.com/sreedas-anjankudy/ev-battery-ai/releases/download/v1.0/best.pt
+    https://github.com/SreedasA/ev_battery_AI/releases/download/v1.0/best.pt
 
 # 3. Run on a disassembly video
 python video_annotator.py \

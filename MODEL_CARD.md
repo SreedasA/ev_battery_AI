@@ -185,7 +185,7 @@ If you use this work in research, please cite:
 ```
 Sreedas A. (2026). EV Battery Component Detector — YOLOv9m with WIoU v3
 Loss for EV Battery Disassembly. GitHub repository.
-https://github.com/[your-username]/ev-battery-ai
+https://github.com/SreedasA/ev_battery_AI
 ```
 
 ---

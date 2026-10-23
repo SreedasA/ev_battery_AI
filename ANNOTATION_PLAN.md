@@ -1,4 +1,4 @@
-# EV Battery — Exact Annotation Plan
+# EV Battery - Exact Annotation Plan
 > For expanding the dataset from 1,045 → ~1,450 images using model-assisted annotation
 > Based on analysis of the `frames/` folder and current dataset state
 
@@ -10,40 +10,40 @@ The current dataset has two structural problems revealed by error analysis:
 
 | Class | Total images | Problem |
 |---|---|---|
-| low_volt_cable | 83 | **Data scarcity** — not enough examples. Thin object, needs more images. |
-| fasteners | 300 | **Small object quality** — 1,307 of 2,924 annotated boxes are flagged "small" at 640px. Boxes are sloppy. Need tighter boxes on small fasteners. |
-| Kia EV9 (brand) | 132 frames annotated of 1,523 | **Brand gap** — model barely trained on this vehicle. Only 8.7% coverage. |
-| Skywell BE11 (brand) | 178 frames of 1,104 | **Underrepresented** — but frames are 4K (3840×2160), highest annotation value for small objects. |
+| low_volt_cable | 83 | **Data scarcity** - not enough examples. Thin object, needs more images. |
+| fasteners | 300 | **Small object quality** - 1,307 of 2,924 annotated boxes are flagged "small" at 640px. Boxes are sloppy. Need tighter boxes on small fasteners. |
+| Kia EV9 (brand) | 132 frames annotated of 1,523 | **Brand gap** - model barely trained on this vehicle. Only 8.7% coverage. |
+| Skywell BE11 (brand) | 178 frames of 1,104 | **Underrepresented** - but frames are 4K (3840×2160), highest annotation value for small objects. |
 
 Everything else (battery_module, battery_tray, BMS_Unit, Busbars, pack_cover) is strong. **Do not waste time annotating frames that only contain strong-class objects.**
 
 ---
 
-## PHASE 1 — Frame Sampling (Do this before anything else)
+## PHASE 1 - Frame Sampling (Do this before anything else)
 
-**Goal:** Select ~400 frames from 3,062 unannotated frames. Not all frames — consecutive video frames are nearly identical and add no value.
+**Goal:** Select ~400 frames from 3,062 unannotated frames. Not all frames - consecutive video frames are nearly identical and add no value.
 
 ### Sampling rules per brand
 
-**Kia EV9 — Target: ~150 frames (highest priority)**
+**Kia EV9 - Target: ~150 frames (highest priority)**
 - 1,391 unannotated frames across frames 00001–02029
 - Large unannotated gaps: 12–203, 223–413, 471–871, 1008–1269, 1292–1500, 1598–1861
 - Strategy: **sample every 10th frame from each gap**
 - This covers the full timeline of the disassembly without redundancy
 - Why priority: brand diversity, model has barely seen this vehicle
 
-**Skywell BE11 — Target: ~180 frames (second priority)**
+**Skywell BE11 - Target: ~180 frames (second priority)**
 - 926 unannotated frames, all at **4K resolution (3840×2160)**
 - Strategy: **sample every 5th unannotated frame**
-- Why priority: 4K gives 4× pixel density — cables and fasteners that are blurry at 1080p are clearly visible here. Best possible source for improving weak classes.
+- Why priority: 4K gives 4× pixel density - cables and fasteners that are blurry at 1080p are clearly visible here. Best possible source for improving weak classes.
 - Note on resolution: keep images at 4K when uploading to Roboflow. Roboflow resizes on export. Training at imgsz=1280 (not 640) will exploit this.
 
-**Arrival Van — Target: ~40 frames (low priority)**
+**Arrival Van - Target: ~40 frames (low priority)**
 - 416 unannotated frames
 - Strategy: sample every 10th unannotated frame
 - Only useful if sampled frames show cables or fasteners
 
-**BYD Shark — Target: ~33 frames (lowest priority)**
+**BYD Shark - Target: ~33 frames (lowest priority)**
 - 329 unannotated frames
 - Strategy: sample every 10th unannotated frame
 - Already well-represented in dataset
@@ -62,7 +62,7 @@ BRANDS = {
     "BYD Shark_raw":          ("frames/BYD Shark_raw",           "annotation_staging/BYD_Shark",  10),
 }
 
-# Frame numbers already annotated — skip these
+# Frame numbers already annotated - skip these
 ALREADY_ANNOTATED = {
     "Kia EV9_raw": {
         "00006","00007","00008","00009","00010","00011","00204","00205","00206","00209",
@@ -100,7 +100,7 @@ for brand, (src, dst, stride) in BRANDS.items():
 
 ---
 
-## PHASE 2 — Pseudo-Labeling (Model Auto-Annotation)
+## PHASE 2 - Pseudo-Labeling (Model Auto-Annotation)
 
 **Goal:** Run `best.pt` on all sampled frames and generate YOLO `.txt` label files. Accept high-confidence predictions automatically; flag the rest for manual review.
 
@@ -110,14 +110,14 @@ These are based on the model's real-world performance on your BYD Shark video:
 
 | Class | Auto-accept threshold | Action if below |
 |---|---|---|
-| pack_cover | ≥ 0.75 | Discard — model rarely gets this wrong |
+| pack_cover | ≥ 0.75 | Discard - model rarely gets this wrong |
 | battery_tray | ≥ 0.75 | Discard |
 | battery_module | ≥ 0.70 | Discard |
 | Busbars | ≥ 0.70 | Discard |
 | BMS_Unit | ≥ 0.70 | Discard |
 | Coolant_tubes | ≥ 0.65 | Flag for manual review |
-| fasteners | **NEVER auto-accept** | Always manual review — small object boxes are poor |
-| low_volt_cable | **NEVER auto-accept** | Always manual review — actively look for missed cables |
+| fasteners | **NEVER auto-accept** | Always manual review - small object boxes are poor |
+| low_volt_cable | **NEVER auto-accept** | Always manual review - actively look for missed cables |
 
 ### Pseudo-label script
 Save as `pseudo_label.py` in the project root:
@@ -245,11 +245,11 @@ Run it:
 python pseudo_label.py --input annotation_staging --output pseudo_labels
 ```
 
-**Output:** `pseudo_labels/review_manifest.csv` — sorted list of every image, whether it needs review, and why.
+**Output:** `pseudo_labels/review_manifest.csv` - sorted list of every image, whether it needs review, and why.
 
 ---
 
-## PHASE 3 — Manual Verification
+## PHASE 3 - Manual Verification
 
 ### Tool choice: Roboflow Annotate (not CVAT, not LabelImg)
 
@@ -259,11 +259,11 @@ Use Roboflow's built-in annotator for this project because:
 - Roboflow has a "Review" queue that maps directly to this workflow
 - For Skywell 4K frames: Roboflow's annotator supports zoom, which is essential for small fastener boxes
 
-CVAT is more powerful but adds overhead — you'd need to manage a separate project and export/import. Roboflow keeps everything in one place for the final Roboflow export.
+CVAT is more powerful but adds overhead - you'd need to manage a separate project and export/import. Roboflow keeps everything in one place for the final Roboflow export.
 
 ### Exact verification workflow per image category
 
-**Category A — Auto-accepted frames (no cable or fastener detected)**
+**Category A - Auto-accepted frames (no cable or fastener detected)**
 - Open in Roboflow annotator
 - Scroll through quickly (3–5 seconds per image)
 - Check: is there a cable or fastener visible in the frame that the model missed?
@@ -271,21 +271,21 @@ CVAT is more powerful but adds overhead — you'd need to manage a separate proj
 - If NO: click Accept
 - Target speed: 50–80 images/hour
 
-**Category B — Flagged frames (cable or fastener detected, or low confidence)**
+**Category B - Flagged frames (cable or fastener detected, or low confidence)**
 - Open in Roboflow annotator
 - For each flagged box: zoom in, check if the box is tight and correct
 - **For fasteners specifically:**
-  - Box should hug the fastener head tightly — not a loose blob around the area
+  - Box should hug the fastener head tightly - not a loose blob around the area
   - If multiple fasteners are clustered, each needs its own individual box
   - Delete any box where the centre is not clearly on a fastener
   - On Skywell 4K frames: zoom to 200%+ and draw tight boxes
 - **For low_volt_cable specifically:**
-  - The cable is a thin line — the box should be a tall narrow rectangle following the cable run
+  - The cable is a thin line - the box should be a tall narrow rectangle following the cable run
   - Check if there are additional cable segments in the frame the model missed
   - If the cable goes off-screen, draw the box up to the image edge
 - Target speed: 15–25 images/hour (slower, more careful)
 
-**Category C — Frames with zero detections**
+**Category C - Frames with zero detections**
 - Check the review_manifest.csv for images where `written_boxes = 0`
 - These are frames where the model found nothing above 0.25 confidence
 - Quick scan: is there actually nothing to annotate (e.g., blurry transition frame)? → delete from staging
@@ -295,16 +295,16 @@ CVAT is more powerful but adds overhead — you'd need to manage a separate proj
 
 1. **Tightness:** Box edges should be within 5–10px of the object boundary at 640px scale. On 4K Skywell frames this means within 20–40px at native resolution.
 2. **Occlusion:** If a component is partially obscured, still draw the box around the full estimated extent of the object. Do not crop the box to only the visible part.
-3. **Class boundaries — common confusions to watch for:**
+3. **Class boundaries - common confusions to watch for:**
    - `battery_module` vs `battery_tray`: tray is the structural frame/housing; modules sit inside it
    - `low_volt_cable` vs `Busbars`: busbars are flat metal conductors; cables are round and flexible
-   - `fasteners` — only annotate clearly identifiable bolt heads/screws. Do not annotate rivets or structural holes.
-4. **Minimum size:** Do not annotate objects smaller than 10×10px at 640px resolution — they add noise.
+   - `fasteners` - only annotate clearly identifiable bolt heads/screws. Do not annotate rivets or structural holes.
+4. **Minimum size:** Do not annotate objects smaller than 10×10px at 640px resolution - they add noise.
 5. **Consistency:** If you annotate fasteners on one frame, annotate ALL visible fasteners in that frame. Partial annotation of a class is worse than no annotation.
 
 ---
 
-## PHASE 4 — Adding to Roboflow Dataset
+## PHASE 4 - Adding to Roboflow Dataset
 
 ### Step-by-step Roboflow upload process
 
@@ -315,11 +315,11 @@ pseudo_labels/
   images/   ← reviewed .jpg files
   labels/   ← corrected YOLO .txt files
 ```
-Delete images from `images/` whose corresponding label file is empty and the frame had nothing to annotate (truly empty frames). Keep empty label files for frames that are genuinely background/transition — they teach the model what NOT to detect.
+Delete images from `images/` whose corresponding label file is empty and the frame had nothing to annotate (truly empty frames). Keep empty label files for frames that are genuinely background/transition - they teach the model what NOT to detect.
 
 **Step 2: Upload to Roboflow**
 
-> ⚠️ **Format note:** YOLOv9 PyTorch TXT is **import-only** on Roboflow — there is no YOLOv9 export option. Use **YOLOv8 PyTorch** for both import and export. The `.txt` label structure is identical, so nothing changes in the files — only the format label you select in the Roboflow UI.
+> **Format note:** YOLOv9 PyTorch TXT is **import-only** on Roboflow - there is no YOLOv9 export option. Use **YOLOv8 PyTorch** for both import and export. The `.txt` label structure is identical, so nothing changes in the files - only the format label you select in the Roboflow UI.
 
 1. Go to roboflow.com → workspace `ev-battery` → project `ev-battery-component-detection-gqljq`
 2. Click **Upload** (top-right)
@@ -327,9 +327,9 @@ Delete images from `images/` whose corresponding label file is empty and the fra
    ```
    zip -r batch_02.zip pseudo_labels/images pseudo_labels/labels pseudo_labels/data.yaml
    ```
-4. Select upload format: **YOLOv8 PyTorch** (NOT YOLOv9 — no export support)
-5. Drag `batch_02.zip` into the upload zone — Roboflow matches images to labels by filename stem
-6. Assign batch name: `"batch_02_frames_expansion"` — keeps it separate from the original 1045 images for audit purposes
+4. Select upload format: **YOLOv8 PyTorch** (NOT YOLOv9 - no export support)
+5. Drag `batch_02.zip` into the upload zone - Roboflow matches images to labels by filename stem
+6. Assign batch name: `"batch_02_frames_expansion"` - keeps it separate from the original 1045 images for audit purposes
 
 **Step 3: Review in Roboflow before generating new version**
 1. After upload, go to **Annotate** tab → your new batch will appear as "Needs Review"
@@ -342,14 +342,14 @@ Delete images from `images/` whose corresponding label file is empty and the fra
    - Train: 80% | Valid: 10% | Test: 10%
    - Enable **Stratified split** so new brand images are distributed across splits (not all Kia EV9 in train only)
 3. Preprocessing: set resize to **640×640** (same as current training config)
-4. **Augmentation — add these for v2:**
-   - Flip: horizontal only (vertical flip disabled — batteries have orientation)
+4. **Augmentation - add these for v2:**
+   - Flip: horizontal only (vertical flip disabled - batteries have orientation)
    - Brightness: ±15%
    - Blur: up to 1px (simulates out-of-focus frames)
    - **Mosaic: disabled** (Ultralytics handles this in training already)
-   - Do NOT add rotation — battery components have strong orientation priors
-5. Click **Generate** — Roboflow creates v2
-6. Export as **YOLOv8 PyTorch** format — NOT YOLOv9 (Roboflow has no YOLOv9 export). YOLOv8 .txt format is structurally identical to YOLOv9 and works directly with Ultralytics `yolo detect train`
+   - Do NOT add rotation - battery components have strong orientation priors
+5. Click **Generate** - Roboflow creates v2
+6. Export as **YOLOv8 PyTorch** format - NOT YOLOv9 (Roboflow has no YOLOv9 export). YOLOv8 .txt format is structurally identical to YOLOv9 and works directly with Ultralytics `yolo detect train`
 
 **Step 5: Retrain**
 Update `args.yaml` data path from v1 to v2 export, then run:
@@ -367,9 +367,9 @@ yolo detect train \
   lr0=0.001
 ```
 Key changes from original run:
-- `copy_paste=0.3` — helps low_volt_cable by pasting cable boxes onto other frames
-- `lr0=0.001` — lower LR for fine-tune (not full retrain from COCO weights)
-- `epochs=50` — enough for fine-tuning, model already knows the task
+- `copy_paste=0.3` - helps low_volt_cable by pasting cable boxes onto other frames
+- `lr0=0.001` - lower LR for fine-tune (not full retrain from COCO weights)
+- `epochs=50` - enough for fine-tuning, model already knows the task
 
 ---
 

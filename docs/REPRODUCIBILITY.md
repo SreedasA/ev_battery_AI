@@ -5,14 +5,14 @@ dataset and trained model weights are not included in the GitHub repository.
 
 ## Dataset
 
-**v2 dataset:** `EV Battery Dataset 1045 v2.0/` — 951 train / 270 val / 135 test images,
+**v2 dataset:** `EV Battery Dataset 1045 v2.0/` - 951 train / 270 val / 135 test images,
 8 classes, verified clean (0 missing labels, 0 invalid class IDs, 0 boundary violations).
 Not committed to git (large files). Source: Roboflow project
 `ev-battery/ev-battery-component-detection-gqljq`.
 
 ## Current Official Model
 
-**Experiment #13** — YOLOv9m, WIoU v3 loss, 250 epochs, v2 dataset.
+**Experiment #13** - YOLOv9m, WIoU v3 loss, 250 epochs, v2 dataset.
 
 ```text
 Weights: runs/detect/ev_battery_loss_exp/wiou_v2_250/weights/best.pt

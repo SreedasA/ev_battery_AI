@@ -1,9 +1,9 @@
-# Model Card — EV Battery Component Detector
+# Model Card - EV Battery Component Detector
 
 **Model:** YOLOv9m with WIoU v3 custom loss function  
 **Version:** Experiment #13 (`wiou_v2_250`)  
-**Task:** Multi-class object detection — EV battery pack components  
-**Domain:** Industrial computer vision — EV battery disassembly  
+**Task:** Multi-class object detection - EV battery pack components  
+**Domain:** Industrial computer vision - EV battery disassembly  
 **Date:** 2026-07-02
 
 ---
@@ -30,7 +30,7 @@ classes (low_volt_cable, fasteners) where the model would otherwise be
 dominated by majority-class gradient signal.
 
 The implementation is a monkey-patch replacing `ultralytics.utils.loss.bbox_iou`
-at module level — no forking of the ultralytics library required.
+at module level - no forking of the ultralytics library required.
 
 ---
 
@@ -69,8 +69,8 @@ at module level — no forking of the ultralytics library required.
 | 2 | Coolant_tubes | Thermal management tubing |
 | 3 | battery_module | Individual battery modules |
 | 4 | battery_tray | Pack structural tray |
-| 5 | fasteners | Bolts, screws — small dense objects |
-| 6 | low_volt_cable | LV wiring harness — thin, elongated |
+| 5 | fasteners | Bolts, screws - small dense objects |
+| 6 | low_volt_cable | LV wiring harness - thin, elongated |
 | 7 | pack_cover | External cover panels |
 
 ---
@@ -133,7 +133,7 @@ distributions and pseudo-labelled additions in v2).
 ## Limitations and Known Failure Modes
 
 **low_volt_cable (mAP50=0.263):** Chronically underperforming. Root cause is
-data volume — 87 training images, many with the cable partially obscured.
+data volume - 87 training images, many with the cable partially obscured.
 WIoU v3 dynamic focusing improves the loss weighting but cannot compensate for
 data scarcity. Do not rely on this class for production decisions without
 further dataset expansion (target: 200+ training images).
@@ -183,7 +183,7 @@ model output. Do not use this model as a sole determinant for:
 If you use this work in research, please cite:
 
 ```
-Sreedas A. (2026). EV Battery Component Detector — YOLOv9m with WIoU v3
+Sreedas A. (2026). EV Battery Component Detector - YOLOv9m with WIoU v3
 Loss for EV Battery Disassembly. GitHub repository.
 https://github.com/SreedasA/ev_battery_AI
 ```

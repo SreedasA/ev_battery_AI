@@ -1,6 +1,6 @@
 # EV Battery Component Detector
 
-![Demo — YOLOv9m detecting battery components in real disassembly footage](docs/demo.gif)
+![Demo - YOLOv9m detecting battery components in real disassembly footage](docs/demo.gif)
 
 Computer vision system for detecting EV battery pack components in disassembly
 videos. Built on YOLOv9m with a custom WIoU v3 loss function, trained on a
@@ -20,7 +20,7 @@ battery_tray    fasteners       low_volt_cable  pack_cover
 
 ## Model Performance
 
-**Experiment #13 — YOLOv9m, WIoU v3 loss, 250 epochs** (best checkpoint: epoch 216/250)
+**Experiment #13 - YOLOv9m, WIoU v3 loss, 250 epochs** (best checkpoint: epoch 216/250)
 
 | Class | Precision | Recall | mAP50 | mAP50-95 |
 |-------|-----------|--------|-------|----------|
@@ -65,7 +65,7 @@ summary JSON.
 ## Repository Layout
 
 ```
-video_annotator.py           CLI inference — video to annotated output + CSV
+video_annotator.py           CLI inference - video to annotated output + CSV
 app/                         FastAPI web app (upload video, track job, download)
 configs/video_inference.json Per-class confidence thresholds, ROI, max_boxes
 loss_experiment.ipynb        Training research: WIoU v3 vs SIoU, 13 experiments
@@ -120,7 +120,7 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 Open `http://127.0.0.1:8000`. Upload a video, monitor processing progress,
 download the annotated output.
 
-Health endpoint: `GET /health` — returns model status, 503 if weights missing.
+Health endpoint: `GET /health` - returns model status, 503 if weights missing.
 
 ## Docker
 
@@ -131,7 +131,7 @@ docker compose up --build
 Open `http://127.0.0.1:8000`. Mounts `./runs`, `./outputs`, and `./configs`
 so model weights stay outside the image. Runs CPU inference (no CUDA base image).
 
-## Research — Loss Function Experiments
+## Research - Loss Function Experiments
 
 `loss_experiment.ipynb` documents 13 experiments comparing SIoU and WIoU v3
 loss functions across epoch budgets (80–250 epochs) on the v2 dataset, with
@@ -156,7 +156,7 @@ python upload_to_roboflow.py --api-key YOUR_KEY          # upload reviewed label
 
 ## Known Limitations
 
-- `low_volt_cable` mAP50=0.263 — limited by 87 training images, not the loss
+- `low_volt_cable` mAP50=0.263 - limited by 87 training images, not the loss
   function. Planned fix: v3 dataset from reviewed pseudo-labels.
 - `fasteners` small-object recall would improve with SAHI sliced inference
   at runtime (no retraining required).
@@ -168,4 +168,4 @@ python upload_to_roboflow.py --api-key YOUR_KEY          # upload reviewed label
 ## Project Status
 
 Working research-to-deployment pipeline. Not a safety-critical production
-system — suitable for process monitoring, applied research, and demonstration.
+system - suitable for process monitoring, applied research, and demonstration.
